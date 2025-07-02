@@ -41,3 +41,14 @@ if np.isclose(E_squared, pc_squared + mc_squared_squared, atol=1e-6):
     st.success("✔️ Energy-momentum relation holds!")
 else:
     st.error("❌ Relation does not hold. Check inputs.")
+
+
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
+
