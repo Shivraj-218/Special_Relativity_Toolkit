@@ -85,3 +85,11 @@ This phenomenon is fundamental in astrophysics and cosmology — it helps us:
 - Analyze binary stars, jets, and quasars  
 - Explore the universe’s expansion history
 """)
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
