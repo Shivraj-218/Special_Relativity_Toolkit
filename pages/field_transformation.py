@@ -94,3 +94,14 @@ st.markdown("""
   \]
 """)
 st.info("Antisymmetry reflects fundamental field constraints: \( F^{\mu\nu} = -F^{\nu\mu} \)")
+
+
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
+
