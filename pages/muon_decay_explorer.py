@@ -86,3 +86,11 @@ st.markdown(f"""
 - **Without Relativity:** ~{int(N_decay_classical):,} muons reach the surface  
 - **Time Dilation Gain:** ×{N_survive / N_decay_classical:.2f} more muons survive
 """)
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
