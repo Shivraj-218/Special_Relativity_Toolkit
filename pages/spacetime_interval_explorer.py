@@ -61,3 +61,13 @@ if st.button("🔍 Check Spacetime Interval"):
         st.info("This is a **time-like** interval.")
     else:
         st.warning("This is a **space-like** interval.")
+
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
+
