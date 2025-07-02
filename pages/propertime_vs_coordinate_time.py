@@ -62,3 +62,11 @@ st.latex(rf"""
 \tau = \frac{{t}}{{\gamma}} = \frac{{{t_max}}}{{{gamma:.6f}}} = {t_max / gamma:.6f}
 """)
 
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
