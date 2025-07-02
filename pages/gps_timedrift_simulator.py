@@ -114,3 +114,11 @@ st.info("""
 Without relativistic corrections, GPS would accumulate errors of up to **10 km/day**.
 Satellites are launched with clocks pre-adjusted to account for these effects, demonstrating Einstein’s relativity in action.
 """)
+st.markdown("""
+<hr style='margin-top: 50px; margin-bottom: 10px'>
+
+<div style='text-align: center; font-size: 14px; color: gray;'>
+&copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
+Created with ❤️ using Streamlit
+</div>
+""", unsafe_allow_html=True)
