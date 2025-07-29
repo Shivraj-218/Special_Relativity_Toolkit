@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Special Relativity Simulation Suite", layout="centered")
+st.set_page_config(page_title="Special Relativity Toolkit", layout="centered")
 
 st.title("🚀 Special Relativity Simulation Suite")
 
