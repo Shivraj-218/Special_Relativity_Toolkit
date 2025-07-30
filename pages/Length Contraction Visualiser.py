@@ -30,14 +30,13 @@ st.subheader("Choose an Image")
 preset = st.checkbox("Use preset spaceship image")
 uploaded_file = st.file_uploader("Or upload your own image (PNG/JPG)", type=["png", "jpg", "jpeg"])
 
-# Load image
 if preset:
     try:
-        # NOTE: For this to work, you must have 'spaceship.png' in the same directory as your script
-        image = Image.open("spaceship.png").convert("RGBA")
-        st.success("Using preset spaceship image.")
+        # NOTE: If 'spaceship.png' is in an 'images' subfolder, use the relative path:
+        image = Image.open("images/spaceship.png").convert("RGBA")
+        st.success("Using preset spaceship image from 'images' folder.")
     except FileNotFoundError:
-        st.error("Missing file: 'spaceship.png'. Please place it in this folder.")
+        st.error("Missing file: 'images/spaceship.png'. Please ensure it's in the 'images' folder.")
         st.stop()
 elif uploaded_file:
     image = Image.open(uploaded_file).convert("RGBA")
