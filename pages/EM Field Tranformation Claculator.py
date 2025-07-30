@@ -7,8 +7,8 @@ st.title("🧲 Lorentz Field Transformer & EM Tensor Calculator")
 # Description
 st.markdown("""
 This tool computes:
-- The transformed electric and magnetic fields \\(\\vec{E}'\\) and \\(\\vec{B}'\\) under a Lorentz boost along the x-axis.
-- The electromagnetic field tensor \\(F^{\\mu\\nu}\\) from the input fields.
+- The transformed electric and magnetic fields $\\vec{E}'$ and $\\vec{B}'$ under a Lorentz boost along the x-axis.
+- The electromagnetic field tensor $F^{\\mu\\nu}$ from the input fields.
 
 ⚠️ **Assumption:** E and B inputs are in consistent units with c=1 (natural units), so boost velocity `v` is dimensionless.
 """)
@@ -17,11 +17,11 @@ This tool computes:
 st.markdown("### 📐 Lorentz Boost Equations")
 st.latex(r"""
 \begin{aligned}
-E'_x &= E_x \\ 
-E'_y &= \gamma (E_y - v B_z) \\ 
-E'_z &= \gamma (E_z + v B_y) \\ 
-B'_x &= B_x \\ 
-B'_y &= \gamma (B_y + v E_z) \\ 
+E'_x &= E_x \\
+E'_y &= \gamma (E_y - v B_z) \\
+E'_z &= \gamma (E_z + v B_y) \\
+B'_x &= B_x \\
+B'_y &= \gamma (B_y + v E_z) \\
 B'_z &= \gamma (B_z - v E_y)
 \end{aligned}
 """)
@@ -67,7 +67,18 @@ st.latex(r"""
 st.info("Boost applied along the x-axis with dimensionless velocity v (c=1). Ensure your E and B inputs are in compatible units.")
 
 # Electromagnetic Field Tensor
-st.subheader("📐 Electromagnetic Field Tensor (F^{μν})")
+st.subheader("📐 Electromagnetic Field Tensor ($F^{\\mu\\nu}$)") # Corrected here too
+
+st.markdown("The electromagnetic field tensor $F^{\\mu\\nu}$ is a $4 \\times 4$ antisymmetric matrix combining the electric and magnetic fields:")
+st.latex(r"""
+F^{\mu\nu} =
+\begin{pmatrix}
+0 & -E_x & -E_y & -E_z \\
+E_x & 0 & -B_z & B_y \\
+E_y & B_z & 0 & -B_x \\
+E_z & -B_y & B_x & 0
+\end{pmatrix}
+""")
 
 F = np.array([
     [ 0.0,  -E_x,  -E_y,  -E_z],
@@ -83,18 +94,20 @@ tensor_latex = r"F^{\mu\nu} = \begin{bmatrix}" + \
 
 st.latex(tensor_latex)
 
-# Explanation
+# --- CORRECTED Explanation Section ---
 st.markdown("""
 **About the Tensor:**
-- \(F^{\mu\nu}\) combines electric and magnetic fields in a single antisymmetric tensor.
-- It satisfies **antisymmetry**: \(F^{\mu\nu}=-F^{\nu\mu}\).
-- Maxwell’s equations compactly express as:
-  \[
-  \partial_\mu F^{\mu\nu} = \mu_0 J^\nu
-  \]
+- $F^{\\mu\\nu}$ combines electric and magnetic fields in a single antisymmetric tensor.
+- It satisfies **antisymmetry**: $F^{\\mu\\nu}=-F^{\\nu\\mu}$.
 """)
-st.info("Antisymmetry reflects fundamental field constraints: \( F^{\mu\nu} = -F^{\nu\mu} \)")
 
+st.markdown("Maxwell’s equations compactly express as:")
+st.latex(r"""
+\partial_\mu F^{\mu\nu} = \mu_0 J^\nu
+""")
+
+st.info("Antisymmetry reflects fundamental field constraints: $F^{\\mu\\nu} = -F^{\\nu\\mu}$")
+# --- END CORRECTED Section ---
 
 st.markdown("""
 <hr style='margin-top: 50px; margin-bottom: 10px'>
@@ -104,4 +117,3 @@ st.markdown("""
 Created with ❤️ using Streamlit
 </div>
 """, unsafe_allow_html=True)
-
