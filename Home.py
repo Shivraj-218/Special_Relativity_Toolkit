@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Special Relativity Toolkit", layout="centered")
 
-st.title("🚀 Special Relativity Simulation Suite")
+st.title("🚀 Special Relativity Toolkit ")
 
 st.markdown("""
 Welcome to the **Special Relativity Simulation Suite** — an interactive educational toolkit designed 
