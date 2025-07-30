@@ -3,7 +3,7 @@ import numpy as np
 
 # Streamlit page setup
 st.set_page_config(page_title="Energy-Momentum Relation", layout="centered")
-st.title("⚛️ Energy-Momentum Relation Verifier")
+st.title("⚛️ Energy-Momentum Relation Calculator")
 
 st.latex(r"""
 E^2 = (pc)^2 + (m c^2)^2
@@ -35,12 +35,7 @@ st.latex(rf"""
 E^2 = {E_squared:.6f} \quad , \quad (pc)^2 + (mc^2)^2 = {pc_squared:.6f} + {mc_squared_squared:.6f} = {pc_squared + mc_squared_squared:.6f}
 """)
 
-# Verification
-st.subheader("✅ Verification")
-if np.isclose(E_squared, pc_squared + mc_squared_squared, atol=1e-6):
-    st.success("✔️ Energy-momentum relation holds!")
-else:
-    st.error("❌ Relation does not hold. Check inputs.")
+
 
 
 st.markdown("""
