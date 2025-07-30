@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import time
 
 # --- Setup ---
-st.set_page_config(page_title="GPS Time Correction Simulator", layout="centered")
+st.set_page_config(page_title="GPS Time Correction Simulator (Thi) ", layout="centered")
 st.title("🛰️ GPS Time Correction Simulator")
 st.markdown("""
 This simulation shows how **Special Relativity (SR)** and **General Relativity (GR)** affect the onboard clocks of GPS satellites.
