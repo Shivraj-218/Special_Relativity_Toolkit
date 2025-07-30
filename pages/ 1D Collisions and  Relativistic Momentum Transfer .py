@@ -1,10 +1,12 @@
+
+
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 
 st.set_page_config(page_title="Relativistic Collision Simulator", layout="centered")
-st.title("🧨 Relativistic Collision Simulator")
+st.title("\U0001F4A8 Relativistic Collision Simulator")
 
 st.latex(r"""
 \text{In this simulation, we explore 1D relativistic collisions using natural units where } c = 1.
@@ -51,18 +53,15 @@ E_total, p_total = E1 + E2, p1 + p2
 
 # ---------------- Collision ----------------
 if mode == "Perfectly Inelastic":
-    def equation(vf):
-        g = gamma(vf)
-        return g * (m1 + m2) * vf - p_total  # Use momentum conservation only
-
-    vf_guess = (v1 * m1 + v2 * m2) / (m1 + m2)
-    vf = float(fsolve(equation, vf_guess))
+    # Correct relativistic treatment
+    vf = p_total / E_total
     gf = gamma(vf)
+    M = np.sqrt(E_total**2 - p_total**2)
+    E_final = E_total
+    p_final = p_total
     v1f = v2f = vf
-    E1f = gf * (m1 + m2)
-    E2f = 0
-    p1f = gf * (m1 + m2) * vf
-    p2f = 0
+    E1f = E2f = None
+    p1f = p2f = None
 else:
     def to_solutions(vars):
         v1f, v2f = vars
@@ -80,7 +79,7 @@ else:
     p1f, p2f = g1f * m1 * v1f, g2f * m2 * v2f
 
 # ---------------- Output Display ----------------
-st.subheader("📊 Results")
+st.subheader("\U0001F4C8 Results")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -90,56 +89,50 @@ with col1:
     st.latex(rf"E_{{\text{{total}}}} = {E_total:.4f}, \quad p_{{\text{{total}}}} = {p_total:.4f}")
 
 with col2:
-    st.markdown("#### 🔹 Final State")
-    st.latex(rf"v_1' = {v1f:.4f}, \quad E_1' = {E1f:.4f}, \quad p_1' = {p1f:.4f}")
-    st.latex(rf"v_2' = {v2f:.4f}, \quad E_2' = {E2f:.4f}, \quad p_2' = {p2f:.4f}")
-    st.latex(rf"\Delta E = {E1f + E2f - E_total:+.4e}, \quad \Delta p = {p1f + p2f - p_total:+.4e}")
-
-# ---------------- Conservation Check ----------------
-if abs((E1 + E2) - (E1f + E2f)) > 1e-5 or abs((p1 + p2) - (p1f + p2f)) > 1e-5:
-    st.warning("⚠️ Numerical conservation error: energy or momentum mismatch exceeds tolerance.")
+    if mode == "Perfectly Inelastic":
+        st.markdown("#### 🔹 Final State (Composite Object)")
+        st.latex(rf"v_f = {vf:.4f}, \quad \gamma_f = {gf:.4f}")
+        st.latex(rf"E_f = {E_final:.4f}, \quad p_f = {p_final:.4f}")
+        st.latex(rf"M = \sqrt{{E^2 - p^2}} = {M:.4f}")
+    else:
+        st.markdown("#### 🔹 Final State")
+        st.latex(rf"v_1' = {v1f:.4f}, \quad E_1' = {E1f:.4f}, \quad p_1' = {p1f:.4f}")
+        st.latex(rf"v_2' = {v2f:.4f}, \quad E_2' = {E2f:.4f}, \quad p_2' = {p2f:.4f}")
+        st.latex(rf"\Delta E = {E1f + E2f - E_total:+.4e}, \quad \Delta p = {p1f + p2f - p_total:+.4e}")
 
 # ---------------- CoM Frame ----------------
 v_com = p_total / E_total
 st.latex(rf"\text{{🧭 Center-of-Momentum Frame Velocity:}} \quad v_{{\text{{com}}}} = {v_com:.4f}")
 
 # ---------------- Bar Plot ----------------
-st.subheader("📈 Energy & Momentum Comparison")
+st.subheader("\U0001F4C8 Energy & Momentum Comparison")
 
-labels = ['p₁', 'p₂', "p₁′", "p₂′"]
-momentum_values = [p1, p2, p1f, p2f]
-energy_labels = ['E₁', 'E₂', "E₁′", "E₂′"]
-energy_values = [E1, E2, E1f, E2f]
+if mode == "Elastic":
+    labels = ['p₁', 'p₂', "p₁′", "p₂′"]
+    momentum_values = [p1, p2, p1f, p2f]
+    energy_labels = ['E₁', 'E₂', "E₁′", "E₂′"]
+    energy_values = [E1, E2, E1f, E2f]
+else:
+    labels = ['p_initial', 'p_final']
+    momentum_values = [p_total, p_final]
+    energy_labels = ['E_initial', 'E_final']
+    energy_values = [E_total, E_final]
 
 fig, ax = plt.subplots(1, 2, figsize=(10, 4))
 
-ax[0].bar(labels, momentum_values, color=['blue', 'orange', 'blue', 'orange'])
+ax[0].bar(labels, momentum_values, color='gray')
 ax[0].set_title("Momentum")
 ax[0].axhline(0, color='black', linewidth=0.5)
 
-ax[1].bar(energy_labels, energy_values, color=['blue', 'orange', 'blue', 'orange'])
+ax[1].bar(energy_labels, energy_values, color='gray')
 ax[1].set_title("Energy")
 ax[1].axhline(0, color='black', linewidth=0.5)
 
 st.pyplot(fig)
 
-# ---------------- Demo Calculation Block ----------------
-st.subheader("🧪 Demo Calculation")
-st.latex(r"\text{Using inputs: } m_1 = 1, \quad v_1 = 0.6; \quad m_2 = 1, \quad v_2 = -0.3")
-
-st.latex(r"\gamma_1 = \frac{1}{\sqrt{1 - 0.6^2}} = 1.25")
-st.latex(r"\gamma_2 = \frac{1}{\sqrt{1 - 0.3^2}} \approx 1.048")
-
-st.latex(r"""
-\begin{align*}
-E_1 &= 1.25, & E_2 &\approx 1.048, & E_\text{total} &\approx 2.298 \\
-p_1 &= 1.25 \times 0.6 = 0.75, & p_2 &\approx 1.048 \times (-0.3) \approx -0.314, & p_\text{total} &\approx 0.436
-\end{align*}
-""")
-
+# ---------------- Footer ----------------
 st.markdown("""
 <hr style='margin-top: 50px; margin-bottom: 10px'>
-
 <div style='text-align: center; font-size: 14px; color: gray;'>
 &copy; 2025 Shivraj Deshmukh — All Rights Reserved<br>
 Created with ❤️ using Streamlit
