@@ -10,7 +10,7 @@ st.title("🕳️ Spacetime Interval Checker")
 
 
 st.markdown("""
-This app determines whether the interval between two events in Minkowski spacetime is 
+This app determines whether the interval between two events in Minkowski spacetime is
 **time-like**, **light-like**, or **space-like**.
 """)
 
@@ -20,8 +20,6 @@ st.markdown("---")
 st.subheader("Spacetime Interval:")
 st.latex(r"s^2 = c^2 (\Delta t)^2 - (\Delta x)^2 - (\Delta y)^2 - (\Delta z)^2")
 st.markdown("This quantity is **invariant** under Lorentz transformations.")
-
-
 
 
 # --- Coordinate Inputs ---
@@ -53,14 +51,39 @@ if st.button("🔍 Check Spacetime Interval"):
 
     st.markdown("### 🧮 Results")
     st.latex(r"s^2 = c^2 (\Delta t)^2 - (\Delta x)^2 - (\Delta y)^2 - (\Delta z)^2")
-    st.latex(f"s^2 = {s_squared:.4e} \, \text{{m}}^2")
 
-    if np.isclose(s_squared, 0.0, atol=1e-8):
-        st.success("This is a **light-like (null)** interval.")
-    elif s_squared > 0:
-        st.info("This is a **time-like** interval.")
+    # --- START OF CUSTOM FORMATTING FOR S_SQUARED ---
+    if s_squared == 0:
+        s_squared_display_latex = r"0 \, \text{m}^2"
     else:
-        st.warning("This is a **space-like** interval.")
+        s_sign = "" if s_squared >= 0 else "-"
+        abs_s_squared = abs(s_squared)
+
+        if abs_s_squared >= 1 or abs_s_squared == 0: # For large numbers or exactly zero
+            exponent = int(np.floor(np.log10(abs_s_squared))) if abs_s_squared > 0 else 0
+            mantissa = abs_s_squared / (10**exponent) if abs_s_squared > 0 else 0.0
+            s_squared_display_latex = rf"{s_sign}{mantissa:.4f} \times 10^{{{exponent}}} \, \text{{m}}^2"
+        else: # For small numbers (0 < abs_s_squared < 1)
+            # Find the exponent for numbers like 0.0001
+            exponent = int(np.floor(np.log10(abs_s_squared)))
+            mantissa = abs_s_squared / (10**exponent)
+            s_squared_display_latex = rf"{s_sign}{mantissa:.4f} \times 10^{{{exponent}}} \, \text{{m}}^2"
+
+    st.latex(rf"s^2 = {s_squared_display_latex}")
+    # --- END OF CUSTOM FORMATTING FOR S_SQUARED ---
+
+
+    # --- CORRECTED CLASSIFICATION DISPLAY ---
+    if np.isclose(s_squared, 0.0, atol=1e-8):
+        st.success("Interval Classification:") # Status message for the box color
+        st.latex(r"\text{This is a } \textbf{light-like (null)} \text{ interval.}")
+    elif s_squared > 0:
+        st.info("Interval Classification:")
+        st.latex(r"\text{This is a } \textbf{time-like} \text{ interval.}")
+    else: # s_squared < 0
+        st.warning("Interval Classification:")
+        st.latex(r"\text{This is a } \textbf{space-like} \text{ interval.}")
+    # --- END CORRECTED CLASSIFICATION DISPLAY ---
 
 st.markdown("""
 <hr style='margin-top: 50px; margin-bottom: 10px'>
@@ -70,4 +93,3 @@ st.markdown("""
 Created with ❤️ using Streamlit
 </div>
 """, unsafe_allow_html=True)
-
