@@ -12,7 +12,7 @@ st.latex(r"""
 """)
 
 # — Inputs —
-v   = st.slider("Relative velocity (v/c)",    -0.99, 0.99, 0.6, 0.01)
+v   = st.slider("Relative velocity (v/c)",     -0.99, 0.99, 0.6, 0.01)
 xA, tA = st.number_input("Event A – x", 2.0), st.number_input("Event A – t", 2.0)
 xB, tB = st.number_input("Event B – x", 4.0), st.number_input("Event B – t", 2.0)
 frame = st.radio("Show simultaneity in frame:", ["S (rest frame)", "S′ (moving frame)"])
@@ -33,8 +33,8 @@ xB_p, tB_p = to_moving_frame(xB, tB, v)
 df = pd.DataFrame({
     "Frame": ["S", "S", "S′", "S′"],
     "Event": ["A", "B", "A", "B"],
-    "x":     [xA,   xB,   xA_p,  xB_p],
-    "t":     [tA,   tB,   tA_p,  tB_p]
+    "x":       [xA,    xB,    xA_p,  xB_p],
+    "t":       [tA,    tB,    tA_p,  tB_p]
 }).round(3)
 
 st.subheader("Event Coordinates in Each Frame")
@@ -66,21 +66,31 @@ for x0 in np.arange(-4, 5, 1):
     ax.plot(np.full_like(x, x0), x, color='gray', linewidth=0.5, alpha=0.2)
 
 # Moving‑frame axes (red)
-ax.plot(x,     v * x,  color='red', linewidth=2, label="x′ axis")
-ax.plot(v * x, x,      color='red', linewidth=2, label="ct′ axis")
+# X' axis (t'=0): t = v*x
+ax.plot(x,      v * x,   color='red', linewidth=2, label="x′ axis")
+# T' axis (x'=0): x = v*t => t = x/v (slope 1/v). But it is t' axis (x'=0) => x = v*t (t is plot y axis, x is plot x axis)
+ax.plot(v * x, x,       color='red', linewidth=2, label="ct′ axis")
+
 
 # Moving‑frame grid (blue)
-inv_g = gamma(v)
+g_val = gamma(v) # Calculate gamma for plotting once
+inv_g_val = 1 / g_val # Calculate 1/gamma for plotting once
+
 xp = np.arange(-5, 6, 1)
 tp = np.arange(-5, 6, 1)
-for t0p in tp:
-    xs = inv_g * (xp + v * t0p)
-    ts = inv_g * (t0p + v * xp)
+for t0p in tp: # Lines of constant t'
+    # Inverse Lorentz transform: x = gamma(x' + v*t'), t = gamma(t' + v*x')
+    # For constant t'=t0p, vary x' (xp)
+    xs = g_val * (xp + v * t0p)
+    ts = g_val * (t0p + v * xp)
     ax.plot(xs, ts, color='blue', linewidth=0.7, alpha=0.3)
-for x0p in xp:
-    xs = inv_g * (x0p + v * tp)
-    ts = inv_g * (tp + v * x0p)
+for x0p in xp: # Lines of constant x'
+    # Inverse Lorentz transform: x = gamma(x' + v*t'), t = gamma(t' + v*x')
+    # For constant x'=x0p, vary t' (tp)
+    xs = g_val * (x0p + v * tp)
+    ts = g_val * (tp + v * x0p)
     ax.plot(xs, ts, color='blue', linewidth=0.7, alpha=0.3)
+
 
 # Plot rest‑frame events A & B
 ax.plot(xA, tA, 'go', markersize=8)
@@ -92,8 +102,11 @@ ax.text(xB + 0.2, tB + 0.1, "B", color='magenta')
 if frame == "S (rest frame)":
     ax.axhline(tA, color='green', linestyle='--', linewidth=2, label="Simultaneous in S")
     ax.fill_between(x, tA-0.02, tA+0.02, color='green', alpha=0.15)
-else:
-    t_sim = inv_g * (tA_p + v * x)
+else: # S' (moving frame)
+    # Line of simultaneity for S' (t' = constant) has slope v in S frame
+    # Equation: t = v*x + constant
+    # The constant is tA_p / gamma
+    t_sim = v * x + tA_p / g_val # CORRECTED LINE
     ax.plot(x, t_sim, color='blue', linestyle='--', linewidth=2, label="Simultaneous in S′")
     ax.fill_between(x, t_sim-0.02, t_sim+0.02, color='blue', alpha=0.15)
 
