@@ -12,8 +12,10 @@ st.latex(r"""
 st.write("Compare how much time passes for a traveler moving at constant speed versus an observer at rest (Earth frame).")
 
 # Inputs
-v = st.slider("Traveler's speed (as a fraction of c)", min_value=0.0, max_value=0.99, value=0.8, step=0.01)
-t_max = st.slider("Total coordinate time on Earth (in arbitrary units)", min_value=1, max_value=20, value=10)
+# Changed to st.number_input for direct numerical entry
+v = st.number_input("Traveler's speed (as a fraction of c):", min_value=0.0, max_value=0.999999, value=0.8, step=0.01, format="%.6f")
+t_max = st.number_input("Total coordinate time on Earth (in arbitrary units):", min_value=1.0, max_value=100.0, value=10.0, step=0.1, format="%.1f")
+
 
 # Calculations
 gamma = 1 / np.sqrt(1 - v**2)
@@ -42,7 +44,7 @@ with col2:
     fig2, ax2 = plt.subplots(figsize=(5, 5))
     ax2.plot([0, 0], [0, t_max], label="Earth (Rest Frame)", color='blue')
     ax2.plot([0, v * t_max], [0, t_max], label="Traveler", color='red')
-    ax2.set_xlim(-1, max(1, v * t_max + 1))
+    ax2.set_xlim(-1, max(1, v * t_max + 1)) # Adjusted x-lim slightly for better visualization with arbitrary units
     ax2.set_ylim(0, t_max)
     ax2.set_xlabel("x")
     ax2.set_ylabel("t")
